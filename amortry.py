@@ -1,4 +1,4 @@
-userpass={'icljaya':'semangat'}
+userpass={'icljaya':'123'}
 userid=input("Masukkan username : ")
 password=input("Masukkan Password : ")
 if userid in userpass and password==userpass[userid]:
@@ -24,33 +24,33 @@ suku_bunga=float(input('Masukkan suku bunga (persen)\t: '))/100
 tenor_pengembalian=int(input('Masukkan tenor pengembalian\t: '))
 
 if periode_terpilih==1:
-    q=suku_bunga
-    p=tenor_pengembalian
+    bunga=suku_bunga
+    periode=tenor_pengembalian
 elif periode_terpilih==2:
-    q=suku_bunga/2
-    p=tenor_pengembalian*2
+    bunga=suku_bunga/2
+    periode=tenor_pengembalian*2
 elif periode_terpilih==3:
-    q=suku_bunga/4
-    p=tenor_pengembalian*4
+    bunga=suku_bunga/4
+    periode=tenor_pengembalian*4
 else:
-    q=suku_bunga/12
-    p=tenor_pengembalian*12
+    bunga=suku_bunga/12
+    periode=tenor_pengembalian*12
 
-pembayaran_perperiode=jumlah_pinjamanawal*q*((1+q)**p)//(((1+q)**p)-1)
+pembayaran_perperiode=jumlah_pinjamanawal*bunga*((1+bunga)**periode)//(((1+bunga)**periode)-1)
 
 z=1
-while z<=p:
-    bunga_periode=(jumlah_pinjamanawal-pembayaran_perperiode)*q//(1-q)
-    if bunga_periode<0:
-        x=bunga_periode*-1
-    else:
-        x=bunga_periode
-    pokok_bayar=pembayaran_perperiode-x
+while z<=periode:
+    bunga_periode=jumlah_pinjamanawal*bunga
+    pokok_bayar=pembayaran_perperiode-bunga_periode
     print('\nAngsuran pokok periode ',z,': Rp.',int(pokok_bayar))
-    print('Angsuran bunga periode ',z,': Rp.',int(x))
+    print('Angsuran bunga periode ',z,': Rp.',int(bunga_periode))
     sisa_hutang=jumlah_pinjamanawal-pokok_bayar
+    if sisa_hutang<=0:
+        print('Sisa hutang periode    ',z,': Rp. 0')
+    else:
+        print('Sisa hutang periode    ',z,': Rp.',int(sisa_hutang))
     jumlah_pinjamanawal=sisa_hutang
     z+=1
 
 print('\nPembayaran perperiode\t: Rp.',int(pembayaran_perperiode))
-print('Total angsuran\t\t: Rp.',int(pembayaran_perperiode*p),'\n')
+print('Total angsuran\t\t: Rp.',int(pembayaran_perperiode*periode),'\n')

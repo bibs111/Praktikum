@@ -1,76 +1,67 @@
-def menu():
-    print("1. Tahunan")
-    print("2. Tengah Tahunan")
-    print("3. Kuartal")
-    print("4. Bulanan")
-    
-def tahunan():
-    pembayaranperperiode=jumlahpinjamanawal*sukubunga*((1+sukubunga)**tenorpengembalian)//(((1+sukubunga)**tenorpengembalian)-1)
-    bungaperiode=(jumlahpinjamanawal-pembayaranperperiode)*sukubunga//(1-sukubunga)
-    pokokbayar=pembayaranperperiode-bungaperiode
-    sisahutang=jumlahpinjamanawal-pokokbayar
-    print('\nBiaya pokok\t\t: Rp.',int(pokokbayar))
-    print('Bunga periode\t\t: Rp.',int(bungaperiode))
-    print('Pembayaran perperiode\t: Rp.',int(pembayaranperperiode))
-    print('Sisa hutang\t\t: Rp.',int(sisahutang))
-    print('Total angsuran\t\t: Rp.',int(pembayaranperperiode*tenorpengembalian),'\n')
+userpass={'icljaya':'123'}
+def login():
+    if userid in userpass and password==userpass[userid]:
+        hasil=True
+    else:
+        hasil=False
+    return hasil
 
-def tengahtahunan():
-    sukubunga2=sukubunga/2
-    periode=tenorpengembalian*2
-    pembayaranperperiode=jumlahpinjamanawal*sukubunga2*((1+sukubunga2)**periode)//(((1+sukubunga2)**periode)-1)
-    bungaperiode=(jumlahpinjamanawal-pembayaranperperiode)*sukubunga2//(1-sukubunga2)
-    pokokbayar=pembayaranperperiode-bungaperiode
-    sisahutang=jumlahpinjamanawal-pokokbayar
-    print('\nBiaya pokok\t\t: RP.',int(pokokbayar))
-    print('Bunga periode\t\t: Rp.',int(bungaperiode))
-    print('Pembayaran perperiode\t: Rp.',int(pembayaranperperiode))
-    print('Sisa hutang\t\t: Rp.',int(sisahutang))
-    print('Total angsuran\t\t: RP.',int(pembayaranperperiode*periode),'\n')
+i=3
+while i>=1:
+    userid=input("Masukkan username : ")
+    password=input("Masukkan Password : ")
+    hasil=login()
+    if hasil==True:
+        print("Login Berhasil")
+        break
+    else:
+        i-=1
+        print("Login Gagal, Sisa Kesempatan Login Anda adalah:",i)
+    while i<=0:
+        quit()
 
-def kuartal():
-    sukubunga3=sukubunga/4
-    periode2=tenorpengembalian*4
-    pembayaranperperiode=jumlahpinjamanawal*sukubunga3*((1+sukubunga3)**periode2)//(((1+sukubunga3)**periode2)-1)
-    bungaperiode=(jumlahpinjamanawal-pembayaranperperiode)*sukubunga3//(1-sukubunga3)
-    pokokbayar=pembayaranperperiode-bungaperiode
-    sisahutang=jumlahpinjamanawal-pokokbayar
-    print('\nBiaya pokok\t\t: Rp.',int(pokokbayar))
-    print('Bunga periode\t\t: Rp.',int(bungaperiode))
-    print('Pembayaran perperiode\t: Rp.',int(pembayaranperperiode))
-    print('Sisa hutang\t\t: Rp.',int(sisahutang))
-    print('Total angsuran\t\t: Rp.',int(pembayaranperperiode*periode2),'\n')
-
-def bulanan():
-    sukubunga4=sukubunga/12
-    periode3=tenorpengembalian*12
-    pembayaranperperiode=jumlahpinjamanawal*sukubunga4*((1+sukubunga4)**periode3)//(((1+sukubunga4)**periode3)-1)
-    bungaperiode=(jumlahpinjamanawal-pembayaranperperiode)*sukubunga4/(1-sukubunga4)
-    pokokbayar=pembayaranperperiode-bungaperiode
-    sisahutang=jumlahpinjamanawal-pokokbayar
-    print('\nBiaya pokok\t\t: Rp.',int(pokokbayar))
-    print('Bunga periode\t\t: Rp.',int(bungaperiode))
-    print('Pembayaran perperiode\t: Rp.',int(pembayaranperperiode))
-    print('Sisa hutang\t\t: Rp.',int(sisahutang))
-    print('Total angsuran\t\t: Rp.',int(pembayaranperperiode*periode3),'\n')
-
-# Program Utama
 print("="*50)
-print("Selamat Datang di Program Perhitungan Amortisasi")
-print("="*50)
+print('Selamat datang dikalkulator amortisasi')
+print('='*50)
 
-# Input
-jumlahpinjamanawal=int(input('Masukkan jumlah pinjaman awal\t: '))
-sukubunga=float(input('Masukkan suku bunga (persen)\t: '))/100
-tenorpengembalian=int(input('Masukkan tenor pengembalian\t: '))
-print("Berikut Merupakan Pilihan Periode Pembayaran:")
-menu()
-pilih=input("Masukkan Pilihan Periode Pembayaran: ")
-if pilih == ("1"):
-    tahunan()
-elif pilih == ("2"):
-    tengahtahunan()
-elif pilih == ("3"):
-    kuartal()
-elif pilih == ("4"):
-    bulanan()
+jumlah_pinjamanawal=int(input('Masukkan jumlah pinjaman awal\t: '))
+suku_bunga=float(input('Masukkan suku bunga (persen)\t: '))/100
+tenor_pengembalian=int(input('Masukkan tenor pengembalian\t: '))
+
+print('\nBerikut ini adalah pilihan periode pembayaran:')
+list_periode=['Tahunan','Tengah Tahunan','Kuartal','Bulanan']
+i=1
+for index in list_periode:
+    print(i,index)
+    i+=1
+periode_terpilih=int(input('\nMasukkan pilihan periode pembayaran: '))
+
+if periode_terpilih==1:
+    bunga=suku_bunga
+    periode=tenor_pengembalian
+elif periode_terpilih==2:
+    bunga=suku_bunga/2
+    periode=tenor_pengembalian*2
+elif periode_terpilih==3:
+    bunga=suku_bunga/4
+    periode=tenor_pengembalian*4
+else:
+    bunga=suku_bunga/12
+    periode=tenor_pengembalian*12
+
+pembayaran_perperiode=jumlah_pinjamanawal*bunga*((1+bunga)*periode)//(((1+bunga)*periode)-1)
+print('\nPembayaran perperiode\t: Rp.',int(pembayaran_perperiode))
+print('Total angsuran\t\t: Rp.',int(pembayaran_perperiode*periode))
+z=1
+while z<=periode:
+    bunga_periode=jumlah_pinjamanawal*bunga
+    pokok_bayar=pembayaran_perperiode-bunga_periode
+    print('\nAngsuran pokok periode ',z,': Rp.',int(pokok_bayar))
+    print('Angsuran bunga periode ',z,': Rp.',int(bunga_periode))
+    sisa_hutang=jumlah_pinjamanawal-pokok_bayar
+    if sisa_hutang<=0:
+        print('Sisa hutang periode    ',z,': Rp. 0')
+    else:
+        print('Sisa hutang periode    ',z,': Rp.',int(sisa_hutang))
+    jumlah_pinjamanawal=sisa_hutang
+    z+=1

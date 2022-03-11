@@ -60,4 +60,4 @@ while periode_ke<=periode:
     else:
         print('Sisa hutang periode    ',periode_ke,': Rp.',int(sisa_hutang))
     jumlah_pinjamanawal=sisa_hutang
-    z+=1
+    periode_ke+=1

@@ -1,17 +1,15 @@
 userpass={'icljaya':'123'}
-data_pembayaran={}
-
-t=2
-while t>=0:
+kesempatan=2
+while kesempatan>=0:
     userid=input("Masukkan username : ")
     password=input("Masukkan Password : ")
     if userid in userpass and password==userpass[userid]:
         print("Login berhasil\n")
         break
     else:
-        print("Login gagal. Silahkan coba lagi.\nSisa kesempatan Anda: ",t,'\n')
-    t-=1
-    if t<0:
+        print("Login gagal. Silahkan coba lagi.\nSisa kesempatan Anda: ",kesempatan,'\n')
+    kesempatan-=1
+    if kesempatan<0:
         print('Maaf Anda tidak bisa mengakses program\n')
         quit()
 
@@ -25,10 +23,10 @@ tenor_pengembalian=int(input('Masukkan tenor pengembalian\t: '))
 
 print('\nBerikut ini adalah pilihan periode pembayaran:')
 list_periode=['Tahunan','Tengah Tahunan','Kuartal','Bulanan']
-i=1
+nomor=1
 for index in list_periode:
-    print(i,index)
-    i+=1
+    print(nomor,index)
+    nomor+=1
 periode_terpilih=int(input('Masukkan pilihan periode pembayaran: '))
 if periode_terpilih==1:
     bunga=suku_bunga
@@ -50,16 +48,16 @@ pembayaran_perperiode=jumlah_pinjamanawal*bunga*((1+bunga)**periode)//(((1+bunga
 print('\nPembayaran perperiode\t: Rp.',int(pembayaran_perperiode))
 print('Total angsuran\t\t: Rp.',int(pembayaran_perperiode*periode))
 
-z=1
-while z<=periode:
+periode_ke=1
+while periode_ke<=periode:
     bunga_periode=jumlah_pinjamanawal*bunga
     pokok_bayar=pembayaran_perperiode-bunga_periode
-    print('\nAngsuran pokok periode ',z,': Rp.',int(pokok_bayar))
-    print('Angsuran bunga periode ',z,': Rp.',int(bunga_periode))
+    print('\nAngsuran pokok periode ',periode_ke,': Rp.',int(pokok_bayar))
+    print('Angsuran bunga periode ',periode_ke,': Rp.',bunga_periode)
     sisa_hutang=jumlah_pinjamanawal-pokok_bayar
     if sisa_hutang<=0:
-        print('Sisa hutang periode    ',z,': Rp. 0')
+        print('Sisa hutang periode    ',periode_ke,': Rp. 0')
     else:
-        print('Sisa hutang periode    ',z,': Rp.',int(sisa_hutang))
+        print('Sisa hutang periode    ',periode_ke,': Rp.',int(sisa_hutang))
     jumlah_pinjamanawal=sisa_hutang
     z+=1

@@ -72,23 +72,19 @@ while pengulangan==0:
         terulang=0
     mengulang=str(input('\nApakah anda ingin melakukan perhitungan peminjaman lainnya? (yes/no): ')).lower()
     if mengulang=='no':
-        terulang+=1
+        pengulangan+=1
     else:
         terulang+=1
 
 if terulang>=0:
     perbandingan=input('\nApakah anda ingin mengetahui perbandingan pembayaran yang ada lakukan? (yes/no): ').lower()
     if perbandingan=='yes':
-        if data_total_angsuran[0]<data_total_angsuran[1]:
-            print('Total angsuran 1: ',data_total_angsuran[0])
-            print('Total angsuran 2: ',data_total_angsuran[1])
-            print('Perhitungan ke-1 lebih efektif karena total angsurannya lebih sedikit')
-        else:
-            print('Perhitungan ke-2 lebih efektif karena total angsurannya lebih sedikit')
+        terkecil=min(data_total_angsuran)
+        print('\nPerhitungan ke- lebih efektif karena total angsurannya lebih kecil yaitu Rp.',terkecil)
 
 pilihan=input(('\nApakah anda ingin menampilkan total semua pembayaran? (yes/no): ')).lower()
 if pilihan=='yes':
-    print('\nBerikut ini adalah total angsuran yang harus dibayar: ',sum(data_total_angsuran))
+    print('\nBerikut ini adalah total angsuran semua pembayaran: ',sum(data_total_angsuran))
     print('Terima kasih telah menggunakan program kami')
     print(userid,localtime,'\n')
 else:

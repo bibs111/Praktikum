@@ -1,8 +1,8 @@
 import time
 localtime = time.asctime( time.localtime(time.time()) )
-data_total_angsuran=[]
 data_angsuran_periodik={}
 data_angsuran_periodik2={}
+data_total_angsuran=[]
 banyak_periode=[]
 pilihan_periode=[]
 banyak_pengulangan=[]
@@ -69,14 +69,15 @@ while pengulangan==0:
             data+=1
     else:
         data2=1
-        for index in banyak_periode:
+        for index in data_angsuran_periodik:
             jumlah=data_angsuran_periodik[data2]+pembayaran_perperiode
             data_angsuran_periodik2[data2]=jumlah
             data_angsuran_periodik.update(data_angsuran_periodik2)
             data2+=1
             data_angsuran_periodik2.clear()
-        if data2<=periode:
+        while data2<=periode:
             data_angsuran_periodik[data2]=pembayaran_perperiode
+            data2+=1
     banyak_periode.clear()
 
     total_angsuran=pembayaran_perperiode*periode

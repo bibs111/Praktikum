@@ -74,6 +74,8 @@ while pengulangan==0:
             data_angsuran_periodik2[data2]=jumlah
             data_angsuran_periodik.update(data_angsuran_periodik2)
             data2+=1
+            if data2>periode:
+                break
             data_angsuran_periodik2.clear()
         while data2<=periode:
             data_angsuran_periodik[data2]=pembayaran_perperiode

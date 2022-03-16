@@ -1,6 +1,11 @@
 import time
 localtime = time.asctime( time.localtime(time.time()) )
 data_total_angsuran=[]
+data_angsuran_periodik={}
+data_angsuran_periodik2={}
+banyak_periode=[]
+pilihan_periode=[]
+banyak_pengulangan=[]
 
 userpass={'icljaya':'123','iclkeren':'456','iclmantap':'789'}
 kesempatan=2
@@ -49,9 +54,31 @@ while pengulangan==0:
     else:
         print("Pilihan tidak tersedia\n")
         quit()
-        
+    pilihan_periode.append(periode_terpilih)
+    periode_ke=1
+    while periode_ke<=periode:
+        banyak_periode.append(periode_ke)
+        periode_ke+=1
+
     pembayaran_perperiode=jumlah_pinjamanawal*bunga*((1+bunga)**periode)//(((1+bunga)**periode)-1)
     print('\nPembayaran perperiode\t: Rp.',int(pembayaran_perperiode))
+    if data_angsuran_periodik=={}:
+        data=1
+        while data<=periode:
+            data_angsuran_periodik[data]=pembayaran_perperiode
+            data+=1
+    else:
+        data2=1
+        for index in banyak_periode:
+            jumlah=data_angsuran_periodik[data2]+pembayaran_perperiode
+            data_angsuran_periodik2[data2]=jumlah
+            data_angsuran_periodik.update(data_angsuran_periodik2)
+            data2+=1
+            data_angsuran_periodik2.clear()
+        if data2<=periode:
+            data_angsuran_periodik[data2]=pembayaran_perperiode
+    banyak_periode.clear()
+
     total_angsuran=pembayaran_perperiode*periode
     print('Total angsuran\t\t: Rp.',int(total_angsuran))
     data_total_angsuran.append(total_angsuran)
@@ -69,24 +96,22 @@ while pengulangan==0:
             print('Sisa hutang periode    ',periode_ke,': Rp.',int(sisa_hutang))
         jumlah_pinjamanawal=sisa_hutang
         periode_ke+=1
-        terulang=0
-    mengulang=str(input('\nApakah anda ingin melakukan perhitungan peminjaman lainnya? (yes/no): ')).lower()
+    mengulang=input('\nApakah anda ingin melakukan perhitungan peminjaman lainnya? (yes/no): ').lower()
     if mengulang=='no':
         pengulangan+=1
     else:
-        terulang+=1
+        banyak_pengulangan.append(1)
 
-if terulang>=0:
-    perbandingan=input('\nApakah anda ingin mengetahui perbandingan pembayaran yang ada lakukan? (yes/no): ').lower()
-    if perbandingan=='yes':
-        terkecil=min(data_total_angsuran)
-        print('\nPerhitungan ke- lebih efektif karena total angsurannya lebih kecil yaitu Rp.',terkecil)
-
-pilihan=input(('\nApakah anda ingin menampilkan total semua pembayaran? (yes/no): ')).lower()
-if pilihan=='yes':
-    print('\nBerikut ini adalah total angsuran semua pembayaran: ',sum(data_total_angsuran))
-    print('Terima kasih telah menggunakan program kami')
-    print(userid,localtime,'\n')
-else:
-    print('\nTerima kasih telah menggunakan program kami')
-    print(userid,localtime,'\n')
+if sum(banyak_pengulangan)>0:
+    if pilihan_periode[0]==pilihan_periode[1]:
+        perbandingan=input('\nApakah anda ingin mengetahui perbandingan pembayaran yang ada lakukan? (yes/no): ').lower()
+        if perbandingan=='yes':
+            print('\nPerhitungan ke-',data_total_angsuran.index(min(data_total_angsuran))+1,' lebih efektif karena total angsurannya lebih kecil yaitu Rp.',min(data_total_angsuran))
+        angsuran_kumulatif=input('\nApakah anda ingin menampilkan angsuran kumulatif tiap periode? (yes/no): ').lower()
+        if angsuran_kumulatif=='yes':
+            print('\nBerikut ini adalah angsuran kumulatif tiap periode: ')
+            for key,value in data_angsuran_periodik.items():
+                print('Angsuran Periode',key,': Rp.',value)
+    print('\nBerikut ini adalah total angsuran semua pembayaran: Rp.',sum(data_total_angsuran))
+print('Terima kasih telah menggunakan program kami')
+print(userid,localtime,'\n')

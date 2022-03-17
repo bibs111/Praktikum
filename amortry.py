@@ -7,6 +7,7 @@ banyak_periode=[]
 pilihan_periode=[]
 banyak_pengulangan=[]
 
+#Login
 userpass={'icljaya':'123','iclkeren':'456','iclmantap':'789'}
 kesempatan=2
 while kesempatan>=0:
@@ -26,12 +27,16 @@ print("="*50)
 print('Selamat datang dikalkulator amortisasi')
 print('='*50)
 
+#Kalkulator
 pengulangan=0
 while pengulangan==0:
+
+    #Input
     jumlah_pinjamanawal=int(input('\nMasukkan jumlah pinjaman awal\t: '))
     suku_bunga=float(input('Masukkan suku bunga (persen)\t: '))/100
     tenor_pengembalian=int(input('Masukkan tenor pengembalian\t: '))
-
+    
+    #Memilih Metode Pembayaran
     print('\nBerikut ini adalah pilihan periode pembayaran:')
     list_periode=['Tahunan','Tengah Tahunan','Kuartal','Bulanan']
     nomor=1
@@ -60,6 +65,7 @@ while pengulangan==0:
         banyak_periode.append(periode_ke)
         periode_ke+=1
 
+    #Menghitung Angsuran per Periode
     pembayaran_perperiode=jumlah_pinjamanawal*bunga*((1+bunga)**periode)//(((1+bunga)**periode)-1)
     print('\nPembayaran perperiode\t: Rp.',int(pembayaran_perperiode))
     if data_angsuran_periodik=={}:
@@ -82,10 +88,12 @@ while pengulangan==0:
             data2+=1
     banyak_periode.clear()
 
+    #Menghitung Total Angsuran
     total_angsuran=pembayaran_perperiode*periode
     print('Total angsuran\t\t: Rp.',int(total_angsuran))
     data_total_angsuran.append(total_angsuran)
 
+    #Menghitung Angsuran Pokok, Angsuran Bunga, dan Sisa Hutang per Periode
     periode_ke=1
     while periode_ke<=periode:
         bunga_periode=jumlah_pinjamanawal*bunga
@@ -107,9 +115,13 @@ while pengulangan==0:
 
 if sum(banyak_pengulangan)>0:
     if pilihan_periode[0]==pilihan_periode[1]:
+
+        #Membandingkan Efektivitas Perhitungan
         perbandingan=input('\nApakah anda ingin mengetahui perbandingan pembayaran yang ada lakukan? (yes/no): ').lower()
         if perbandingan=='yes':
             print('\nPerhitungan ke-',data_total_angsuran.index(min(data_total_angsuran))+1,' lebih efektif karena total angsurannya lebih kecil yaitu Rp.',min(data_total_angsuran))
+        
+        #Menampilkan Angsuran Kumulatif per Periode
         angsuran_kumulatif=input('\nApakah anda ingin menampilkan angsuran kumulatif tiap periode? (yes/no): ').lower()
         if angsuran_kumulatif=='yes':
             print('\nBerikut ini adalah angsuran kumulatif tiap periode: ')

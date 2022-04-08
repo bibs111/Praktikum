@@ -6,12 +6,6 @@ data_total_angsuran=[]
 banyak_periode=[]
 banyak_pengulangan=[]
 
-def error_yn():
-    try:
-        print('Mohon maaf, kami hanya menerima yes/no')
-    except:
-        return
-
 #Login
 userpass={'icljaya':'123','iclkeren':'456','iclmantap':'789'}
 kesempatan=2

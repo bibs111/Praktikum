@@ -1,6 +1,7 @@
 from ast import Index
 import time
-
+import matplotlib.pyplot as plt
+import numpy as np
 from cv2 import exp
 localtime = time.asctime( time.localtime(time.time()) )
 data_angsuran_periodik={}
@@ -123,13 +124,8 @@ while pengulangan==0:
     else:
         data=1
         while data<=periode:
-            if data>int(index in data_angsuran_periodik):
-                while int(index in data_angsuran_periodik)<data<=periode:
-                    data_angsuran_periodik[data]=pembayaran_perperiode
-                    data+=1
-                break
             jumlah=data_angsuran_periodik[data]+pembayaran_perperiode
-            data_angsuran_periodik2[data]=jumlah
+            data_angsuran_periodik[data]=jumlah
             data+=1
             if data==waktu_pelunasan:
                 jumlah=data_angsuran_periodik[data]+pembayaran_perperiode*(periode-data)
@@ -163,6 +159,12 @@ while pengulangan==0:
             print('Angsuran bunga periode ',periode_ke,': Rp.', int(total_angsuran-(sisa_hutang+sum(total_bunga))))
             print('Sisa hutang periode    ',periode_ke,': Rp. 0')
             break
+    
+    y=np.array([pokok_bayar,bunga_periode])
+    mylabels=["Angsuran Pokok","Angsuran Bunga"]
+    plt.pie(y,labels=mylabels,autopct='%1.1f%%',startangle=90)
+    plt.title('Perbandingan Agsuran Pokok dan Angsuran Bunga')
+    plt.show()
 
     #Pengulangan
     while True:

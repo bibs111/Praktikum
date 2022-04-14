@@ -1,15 +1,17 @@
-from ast import Index
 import time
+from tracemalloc import start
 import matplotlib.pyplot as plt
 import numpy as np
-from cv2 import exp
+import pandas as pd
 localtime = time.asctime( time.localtime(time.time()) )
-data_angsuran_periodik={}
-data_angsuran_periodik2={}
 data_total_angsuran=[]
-total_bunga=[]
+bunga_periodik=[]
+pokok_periodik=[]
+utang_periodik=[]
 banyak_periode=[]
 banyak_pengulangan=[]
+yes=['yes','ya','y']
+no=['no','tidak','n']
 
 #Login
 userpass={'icljaya':'123','iclkeren':'456','iclmantap':'789'}
@@ -39,17 +41,24 @@ while pengulangan==0:
     while True:
         try:
             jumlah_pinjamanawal=int(input('\nMasukkan jumlah pinjaman awal\t   : '))
+        except Exception:
+            print('Tolong masukkan angka dan bukan karakter')
+        try:
             suku_bunga=float(input('Masukkan suku bunga (persen)\t   : '))/100
+        except Exception:
+            print('Tolong masukkan angka dan bukan karakter')
+        try:
             tenor_pengembalian=int(input('Masukkan tenor pengembalian (tahun): '))
         except Exception:
             print('Tolong masukkan angka dan bukan karakter')
         else:
             break
 
+
     #pelunasan
     while True:
-        pelunasan=input('\nApakah anda ingin melunasi pada waktu tertentu? (yes/no): ')
-        if pelunasan=='yes':
+        pelunasan=input('\nApakah anda ingin melunasi pada waktu tertentu?: ').lower()
+        if pelunasan in yes:
             if tenor_pengembalian==1:
                 while True:
                     try:
@@ -98,7 +107,7 @@ while pengulangan==0:
                     else:
                         print('Tolong masukkan sesuai dengan pilihan yang tersedia')
                 break
-        elif pelunasan=='no':
+        elif pelunasan in no:
             break
         else:
             print('Tolong masukkan sesuai dengan pilihan yang tersedia')
@@ -106,33 +115,10 @@ while pengulangan==0:
     #Menghitung Angsuran per Periode
     bunga=suku_bunga/12
     periode=tenor_pengembalian*12
+    if pelunasan in no:
+        waktu_pelunasan=periode
     pembayaran_perperiode=jumlah_pinjamanawal*bunga*((1+bunga)**periode)//(((1+bunga)**periode)-1)
     print('\nPembayaran perbulan\t: Rp.',int(pembayaran_perperiode))  
-    if data_angsuran_periodik=={}:
-        data=1
-        while data<=periode:
-            data_angsuran_periodik[data]=pembayaran_perperiode
-            data+=1
-            try:
-                if data==waktu_pelunasan:
-                    data_angsuran_periodik[data]=pembayaran_perperiode*(periode-data)
-                    if data_angsuran_periodik[data]==0:
-                        data_angsuran_periodik[data]=pembayaran_perperiode
-                    break
-            except NameError:
-                waktu_pelunasan=periode
-    else:
-        data=1
-        while data<=periode:
-            jumlah=data_angsuran_periodik[data]+pembayaran_perperiode
-            data_angsuran_periodik[data]=jumlah
-            data+=1
-            if data==waktu_pelunasan:
-                jumlah=data_angsuran_periodik[data]+pembayaran_perperiode*(periode-data)
-                data_angsuran_periodik[data]=jumlah
-                break
-        
-    banyak_periode.clear()
 
     #Menghitung Total Angsuran
     total_angsuran=pembayaran_perperiode*periode
@@ -143,7 +129,6 @@ while pengulangan==0:
     periode_ke=1
     while periode_ke<=periode:
         bunga_periode=jumlah_pinjamanawal*bunga
-        total_bunga.append(bunga_periode)
         pokok_bayar=pembayaran_perperiode-bunga_periode
         print('\nAngsuran pokok periode ',periode_ke,': Rp.',int(pokok_bayar))
         print('Angsuran bunga periode ',periode_ke,': Rp.',int(bunga_periode))
@@ -153,14 +138,35 @@ while pengulangan==0:
         else:
             print('Sisa hutang periode    ',periode_ke,': Rp.',int(sisa_hutang))
         jumlah_pinjamanawal=sisa_hutang
+        bunga_periodik.append(bunga_periode)
+        pokok_periodik.append(pokok_bayar)
+        utang_periodik.append(sisa_hutang)
         periode_ke+=1
         if periode_ke==waktu_pelunasan:
-            print('\nAngsuran pokok periode ',periode_ke,': Rp.', int(sisa_hutang))
-            print('Angsuran bunga periode ',periode_ke,': Rp.', int(total_angsuran-(sisa_hutang+sum(total_bunga))))
-            print('Sisa hutang periode    ',periode_ke,': Rp. 0')
-            break
-    
-    y=np.array([pokok_bayar,bunga_periode])
+            if pelunasan=='yes':
+                bunga_periode=total_angsuran-(sisa_hutang+sum(bunga_periodik))
+                print('\nAngsuran pokok periode ',periode_ke,': Rp.', int(sisa_hutang))
+                print('Angsuran bunga periode ',periode_ke,': Rp.', int(bunga_periode))
+                print('Sisa hutang periode    ',periode_ke,': Rp. 0')
+                pokok_periodik.append(sisa_hutang)
+                bunga_periodik.append(bunga_periode)
+                utang_periodik.append(0)
+                break
+     
+    #Tabel
+    print('\nBerikut ini merupakan tabel data amortisasi\n')
+    print('='*64)
+    print('\t\t\tTabel Amortisasi')
+    print('='*64)
+    tabel={'Angsuran Pokok':pd.Series(pokok_periodik),
+           'Angsuran Bunga':pd.Series(bunga_periodik),
+           'Total Angsuran':pd.Series(data_total_angsuran),
+           'Sisa Utang':pd.Series(utang_periodik)}
+    df=pd.DataFrame(tabel)
+    print(df)
+
+    #Menampilkan PieChart
+    y=np.array([sum(pokok_periodik),sum(bunga_periodik)])
     mylabels=["Angsuran Pokok","Angsuran Bunga"]
     plt.pie(y,labels=mylabels,autopct='%1.1f%%',startangle=90)
     plt.title('Perbandingan Agsuran Pokok dan Angsuran Bunga')
@@ -168,11 +174,11 @@ while pengulangan==0:
 
     #Pengulangan
     while True:
-        mengulang=input('\nApakah anda ingin melakukan perhitungan peminjaman lainnya? (yes/no): ').lower()
-        if mengulang=='no':
+        mengulang=input('\nApakah anda ingin melakukan perhitungan peminjaman lainnya?: ').lower()
+        if mengulang in no:
             pengulangan+=1
             break
-        elif mengulang=='yes':
+        elif mengulang in yes:
             banyak_pengulangan.append(1)
             break
         else:
@@ -181,28 +187,15 @@ while pengulangan==0:
 if sum(banyak_pengulangan)>0:
     #Membandingkan Efektivitas Perhitungan
     while True:
-        perbandingan=input('\nApakah anda ingin mengetahui perbandingan pembayaran yang ada lakukan? (yes/no): ').lower()
-        if perbandingan=='yes':
+        perbandingan=input('\nApakah anda ingin mengetahui perbandingan pembayaran yang ada lakukan?: ').lower()
+        if perbandingan in yes:
             print('\nPerhitungan ke-',data_total_angsuran.index(min(data_total_angsuran))+1,' lebih efektif karena total angsurannya lebih kecil yaitu Rp.',min(data_total_angsuran))
             break
-        elif perbandingan=='no':
+        elif perbandingan in no:
             break
         else:
             print('Tolong masukkan sesuai dengan pilihan yang tersedia')
-        
-    #Menampilkan Angsuran Kumulatif per Periode
-    while True:
-        angsuran_kumulatif=input('\nApakah anda ingin menampilkan angsuran kumulatif tiap periode? (yes/no): ').lower()
-        if angsuran_kumulatif=='yes':
-            print('\nBerikut ini adalah angsuran kumulatif tiap periode: ')
-            for key,value in data_angsuran_periodik.items():
-                print('Angsuran Periode',key,': Rp.',value)
-            break
-        elif angsuran_kumulatif=='no':
-            break
-        else:
-            print('Tolong masukkan sesuai dengan pilihan yang tersedia')
-    print('\nBerikut ini adalah total angsuran semua pembayaran: Rp.',sum(data_total_angsuran))
+print('\nBerikut ini adalah total angsuran semua pembayaran: Rp.',sum(data_total_angsuran))
 
 #Menampilkan pengguna dan waktu akses
 print('\nTerima kasih telah menggunakan program kami')
